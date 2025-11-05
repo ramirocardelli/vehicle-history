@@ -1,0 +1,16 @@
+{
+  "name": "frontend-backend-template",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@bsv/cars-cli": "^1.2.9",
+    "@bsv/lars": "^1.5.6"
+  }
+}

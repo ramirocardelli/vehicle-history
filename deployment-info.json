@@ -1,0 +1,18 @@
+{
+  "schema": "bsv-app",
+  "schemaVersion": "1.0",
+  "topicManagers": {
+    "tm_template": "./backend/src/topic-managers/TemplateTopicManager.ts"
+  },
+  "lookupServices": {
+    "ls_template": {
+      "serviceFactory": "./backend/src/lookup-services/TemplateLookupServiceFactory.ts",
+      "hydrateWith": "mongo"
+    }
+  },
+  "frontend": {
+    "language": "react",
+    "sourceDirectory": "./frontend"
+  },
+  "contracts": {}
+}
