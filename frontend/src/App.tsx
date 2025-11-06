@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { WalletClient, PublicKey } from "@bsv/sdk";
 import VehicleDetail from "./VehicleDetail";
+import CreateVehicle from "./CreateVehicle";
 import type { Vehicle } from "./types";
 
 // Minimal types — adjust imports to match the BSV wallet library you use.
@@ -148,14 +149,17 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div>
-            {!isWalletConnected ? (
+          <div style={{ display: 'flex', gap: 8 }}>
+            {isWalletConnected ? (
+              <>
+                <button className="btn btn-ghost" onClick={() => navigate('/create')}>Create Token</button>
+                <button className="btn btn-ghost" onClick={handleSignOut} disabled={isLoading}>
+                  Sign out
+                </button>
+              </>
+            ) : (
               <button className="btn btn-primary" onClick={handleConnectWallet} disabled={isLoading}>
                 {isLoading ? 'Connecting…' : 'Connect BSV Desktop'}
-              </button>
-            ) : (
-              <button className="btn btn-ghost" onClick={handleSignOut} disabled={isLoading}>
-                Sign out
               </button>
             )}
           </div>
@@ -171,18 +175,13 @@ export default function HomePage() {
             and anchors proof data on BSV when publishing service logs.
           </p>
 
-          {route.startsWith('/vehicle/') ? (
+          {route === '/create' ? (
+            <CreateVehicle ownerAddress={walletAddress} onCreated={(vin) => navigate(`/vehicle/${vin}`)} />
+          ) : route.startsWith('/vehicle/') ? (
             <VehicleDetail vin={route.replace('/vehicle/', '')} />
           ) : (
             <VehiclesList onOpen={(vin: string) => navigate(`/vehicle/${vin}`)} />
           )}
-
-          {isWalletConnected && walletAddress ? (
-            <div style={{ marginTop: 20 }}>
-              <strong>Connected address:</strong>
-              <div className="vehicle-vin">{walletAddress}</div>
-            </div>
-          ) : null}
 
           {!isWalletConnected && !isLoading ? (
             <div style={{ marginTop: 16 }} className="muted">
