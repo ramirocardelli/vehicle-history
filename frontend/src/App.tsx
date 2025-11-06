@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { WalletClient, PublicKey } from "@bsv/sdk";
+import VehicleDetail from "./VehicleDetail";
+import type { Vehicle } from "./types";
 
 // Minimal types — adjust imports to match the BSV wallet library you use.
 type WalletSession = {
@@ -115,6 +117,22 @@ export default function HomePage() {
     setIsLoading(false);
   };
 
+  // Simple client-side router: if path starts with /vehicle/:vin show detail
+  const [route, setRoute] = useState<string>(window.location.pathname);
+
+  // Listen to popstate so back/forward work
+  useEffect(() => {
+    const onPop = () => setRoute(window.location.pathname);
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+
+  // helper to navigate
+  const navigate = (path: string) => {
+    window.history.pushState({}, '', path);
+    setRoute(path);
+  };
+
   return (
     <>
       <header
@@ -150,28 +168,70 @@ export default function HomePage() {
       </header>
 
       <main style={{ padding: 24, fontFamily: "system-ui, sans-serif" }}>
-      <h1>Vehicle History — Sign in with BSV Desktop</h1>
+        <h1>Vehicle History — Sign in with BSV Desktop</h1>
 
-      <p>
-        Use your BSV Desktop wallet to authenticate. This page will attempt to
-        connect to a local BSV Desktop Wallet Client API.
-      </p>
+        <p>
+          Use your BSV Desktop wallet to authenticate. This page will attempt to
+          connect to a local BSV Desktop Wallet Client API.
+        </p>
 
-      
+        {route.startsWith('/vehicle/') ? (
+          <VehicleDetail vin={route.replace('/vehicle/', '')} />
+        ) : (
+          <VehiclesList onOpen={(vin: string) => navigate(`/vehicle/${vin}`)} />
+        )}
 
-      {isWalletConnected && walletAddress ? (
-        <div style={{ marginTop: 20 }}>
-          <strong>Connected address:</strong>
-          <div>{walletAddress}</div>
-        </div>
-      ) : null}
+        {isWalletConnected && walletAddress ? (
+          <div style={{ marginTop: 20 }}>
+            <strong>Connected address:</strong>
+            <div>{walletAddress}</div>
+          </div>
+        ) : null}
 
-      {!isWalletConnected && !isLoading ? (
-        <div style={{ marginTop: 16, color: "#666" }}>
-          Not connected — click the button to open BSV Desktop and authenticate.
-        </div>
-      ) : null}
-    </main>
+        {!isWalletConnected && !isLoading ? (
+          <div style={{ marginTop: 16, color: "#666" }}>
+            Not connected — click the button to open BSV Desktop and authenticate.
+          </div>
+        ) : null}
+      </main>
     </>
   );
 }
+
+function VehiclesList({ onOpen }: { onOpen: (vin: string) => void }) {
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch('http://localhost:4001/api/vehicles')
+      .then(r => r.json())
+      .then((data) => setVehicles(data))
+      .catch(err => console.error('Failed to load vehicles', err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  return (
+    <section>
+      <h2>Available Vehicles</h2>
+      {loading ? <div>Loading…</div> : null}
+      <ul style={{ listStyle: 'none', padding: 0 }}>
+        {vehicles.map(v => (
+          <li key={v.vin} style={{ padding: 12, borderBottom: '1px solid #eee' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ fontWeight: 600 }}>{v.make} {v.model} ({v.year})</div>
+                <div style={{ color: '#666' }}>{v.vin}</div>
+              </div>
+              <div>
+                <button onClick={() => onOpen(v.vin)}>View</button>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+// VehicleDetail moved to its own file (frontend/src/VehicleDetail.tsx)
