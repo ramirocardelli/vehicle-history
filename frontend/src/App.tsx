@@ -135,64 +135,61 @@ export default function HomePage() {
 
   return (
     <>
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "12px 24px",
-          borderBottom: "1px solid #eee",
-          fontFamily: "system-ui, sans-serif",
-        }}
-      >
-        <div style={{ fontSize: 18, fontWeight: 600 }}>Vehicle History</div>
-        <div>
-          {!isWalletConnected ? (
-            <button
-              onClick={handleConnectWallet}
-              disabled={isLoading}
-              style={{ padding: "8px 16px", fontSize: 14 }}
-            >
-              {isLoading ? "Connecting…" : "Connect BSV Desktop"}
-            </button>
-          ) : (
-            <button
-              onClick={handleSignOut}
-              disabled={isLoading}
-              style={{ padding: "8px 16px", fontSize: 14 }}
-            >
-              Sign out
-            </button>
-          )}
+      <header className="app-header">
+        <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="app-brand">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <rect width="24" height="24" rx="5" fill="#0ea5a4" />
+              <path d="M6 15l3-6 3 6 3-8 3 10" stroke="#07203a" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            </svg>
+            <div>
+              Vehicle History
+              <div className="app-subtle" style={{ fontSize: 12 }}>Proof of service on BSV</div>
+            </div>
+          </div>
+
+          <div>
+            {!isWalletConnected ? (
+              <button className="btn btn-primary" onClick={handleConnectWallet} disabled={isLoading}>
+                {isLoading ? 'Connecting…' : 'Connect BSV Desktop'}
+              </button>
+            ) : (
+              <button className="btn btn-ghost" onClick={handleSignOut} disabled={isLoading}>
+                Sign out
+              </button>
+            )}
+          </div>
         </div>
       </header>
 
-      <main style={{ padding: 24, fontFamily: "system-ui, sans-serif" }}>
-        <h1>Vehicle History — Sign in with BSV Desktop</h1>
+      <main style={{ padding: 28, fontFamily: 'system-ui, sans-serif' }}>
+        <div className="container">
+          <h1 style={{ marginTop: 0 }}>Vehicle History — Sign in with BSV Desktop</h1>
 
-        <p>
-          Use your BSV Desktop wallet to authenticate. This page will attempt to
-          connect to a local BSV Desktop Wallet Client API.
-        </p>
+          <p className="muted">
+            Use your BSV Desktop wallet to authenticate. This demo stores vehicle records off-chain in MongoDB
+            and anchors proof data on BSV when publishing service logs.
+          </p>
 
-        {route.startsWith('/vehicle/') ? (
-          <VehicleDetail vin={route.replace('/vehicle/', '')} />
-        ) : (
-          <VehiclesList onOpen={(vin: string) => navigate(`/vehicle/${vin}`)} />
-        )}
+          {route.startsWith('/vehicle/') ? (
+            <VehicleDetail vin={route.replace('/vehicle/', '')} />
+          ) : (
+            <VehiclesList onOpen={(vin: string) => navigate(`/vehicle/${vin}`)} />
+          )}
 
-        {isWalletConnected && walletAddress ? (
-          <div style={{ marginTop: 20 }}>
-            <strong>Connected address:</strong>
-            <div>{walletAddress}</div>
-          </div>
-        ) : null}
+          {isWalletConnected && walletAddress ? (
+            <div style={{ marginTop: 20 }}>
+              <strong>Connected address:</strong>
+              <div className="vehicle-vin">{walletAddress}</div>
+            </div>
+          ) : null}
 
-        {!isWalletConnected && !isLoading ? (
-          <div style={{ marginTop: 16, color: "#666" }}>
-            Not connected — click the button to open BSV Desktop and authenticate.
-          </div>
-        ) : null}
+          {!isWalletConnected && !isLoading ? (
+            <div style={{ marginTop: 16 }} className="muted">
+              Not connected — click the button to open BSV Desktop and authenticate.
+            </div>
+          ) : null}
+        </div>
       </main>
     </>
   );
@@ -217,15 +214,13 @@ function VehiclesList({ onOpen }: { onOpen: (vin: string) => void }) {
       {loading ? <div>Loading…</div> : null}
       <ul style={{ listStyle: 'none', padding: 0 }}>
         {vehicles.map(v => (
-          <li key={v.vin} style={{ padding: 12, borderBottom: '1px solid #eee' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <div>
-                <div style={{ fontWeight: 600 }}>{v.make} {v.model} ({v.year})</div>
-                <div style={{ color: '#666' }}>{v.vin}</div>
-              </div>
-              <div>
-                <button onClick={() => onOpen(v.vin)}>View</button>
-              </div>
+          <li key={v.vin} className="card vehicle-card" style={{ marginBottom: 12 }}>
+            <div>
+              <div style={{ fontWeight: 700 }}>{v.make} {v.model} <span className="muted">({v.year})</span></div>
+              <div className="vehicle-vin">{v.vin}</div>
+            </div>
+            <div>
+              <button className="btn btn-ghost" onClick={() => onOpen(v.vin)}>View</button>
             </div>
           </li>
         ))}

@@ -5,8 +5,16 @@
 
   /* Prefer a light, airy default color scheme */
   color-scheme: light;
-  color: #111827; /* dark text on light background */
-  background-color: #f5f7fb; /* soft light gray/blue */
+  color: #0f172a; /* dark text on light background */
+  /* soft textured background with subtle diagonal stripes */
+  background-color: #eef2f7;
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(15,23,42,0.02) 0px,
+    rgba(15,23,42,0.02) 1px,
+    transparent 1px,
+    transparent 14px
+  );
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -36,6 +44,80 @@ main {
   width: 100%;
   max-width: 100%;
 }
+
+/* Centered content container with comfortable measure */
+.container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Header */
+.app-header {
+  background: linear-gradient(90deg, #071029 0%, #0b1630 100%);
+  color: #ffffff;
+  padding: 14px 24px;
+  box-shadow: 0 2px 10px rgba(2,6,23,0.15);
+}
+.app-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
+.app-subtle {
+  color: rgba(255,255,255,0.85);
+  font-weight: 500;
+}
+
+/* Cards */
+.card {
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 6px 18px rgba(11, 20, 35, 0.04);
+}
+.vehicle-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vehicle-vin {
+  color: #374151;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Segoe UI Mono", monospace;
+  font-size: 0.9em;
+}
+
+/* Buttons */
+.btn {
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+.btn-primary {
+  background: linear-gradient(90deg,#0ea5a4,#0ea5b4);
+  color: white;
+}
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(15,23,42,0.06);
+  color: #0f172a;
+}
+
+.vehicle-detail pre {
+  background: #f8fafc;
+  padding: 12px;
+  border-radius: 8px;
+  overflow: auto;
+}
+
+.muted { color: #6b7280 }
+
 
 h1 {
   font-size: 3.2em;
