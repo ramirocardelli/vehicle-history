@@ -54,7 +54,7 @@ async function start() {
   app.post('/api/vehicles', async (req, res) => {
     try {
       const body = req.body || {};
-      const { vin, make, model, year, currentMileage, ownerAddress, metadata, tokenId, onchainAt, vehicleHash } = body;
+      const { vin, make, model, year, currentMileage, ownerAddress, metadata, tokenId, onchainTx, onchainAt, vehicleHash } = body;
       if (!vin || !make || !model || !year || !ownerAddress) {
         return res.status(400).json({ error: 'Missing required fields' });
       }
@@ -73,6 +73,7 @@ async function start() {
         currentMileage: currentMileage ?? null,
         ownerAddress,
         tokenId: tokenId || null,
+        onchainTx: onchainTx || null,
         onchainAt: onchainAt ? new Date(onchainAt) : null,
         vehicleHash: vehicleHash || null,
         metadata: metadata || {},
@@ -85,6 +86,58 @@ async function start() {
     } catch (err) {
       console.error('Failed to create vehicle', err);
       res.status(500).json({ error: 'Failed to create vehicle' });
+    }
+  });
+
+  // Service Logs endpoints
+  app.get('/api/vehicles/:vin/logs', async (req, res) => {
+    try {
+      const vin = req.params.vin;
+      const col = db.collection('serviceLogs');
+      const logs = await col.find({ vehicleVin: vin }).sort({ serviceDate: -1 }).toArray();
+      res.json(logs);
+    } catch (err) {
+      console.error('Failed to get service logs', err);
+      res.status(500).json({ error: 'Failed to get service logs' });
+    }
+  });
+
+  app.post('/api/vehicles/:vin/logs', async (req, res) => {
+    try {
+      const vin = req.params.vin;
+      const body = req.body || {};
+      const { serviceType, serviceDate, mileage, description, cost, receiptUrl, txid, onchainAt, logHash } = body;
+      
+      if (!serviceType || !serviceDate || !mileage || !description) {
+        return res.status(400).json({ error: 'Missing required fields' });
+      }
+
+      // Verify vehicle exists
+      const vehicleCol = db.collection('vehicles');
+      const vehicle = await vehicleCol.findOne({ vin });
+      if (!vehicle) return res.status(404).json({ error: 'Vehicle not found' });
+
+      const col = db.collection('serviceLogs');
+      const now = new Date();
+      const doc = {
+        vehicleVin: vin,
+        serviceType,
+        serviceDate: new Date(serviceDate),
+        mileage: Number(mileage),
+        description,
+        cost: cost ? Number(cost) : null,
+        receiptUrl: receiptUrl || null,
+        txid: txid || null,
+        onchainAt: onchainAt ? new Date(onchainAt) : null,
+        logHash: logHash || null,
+        createdAt: now,
+      };
+
+      const r = await col.insertOne(doc);
+      res.status(201).json(Object.assign({ _id: r.insertedId }, doc));
+    } catch (err) {
+      console.error('Failed to create service log', err);
+      res.status(500).json({ error: 'Failed to create service log' });
     }
   });
 

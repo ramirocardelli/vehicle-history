@@ -202,7 +202,7 @@ export default function HomePage() {
           {route === '/create' ? (
             <CreateVehicle wallet={wallet} ownerAddress={walletAddress} onCreated={(vin) => navigate(`/vehicle/${vin}`)} />
           ) : route.startsWith('/vehicle/') ? (
-            <VehicleDetail vin={route.replace('/vehicle/', '')} />
+            <VehicleDetail vin={route.replace('/vehicle/', '')} wallet={wallet} />
           ) : (
             <VehiclesList onOpen={(vin: string) => navigate(`/vehicle/${vin}`)} />
           )}
