@@ -74,7 +74,9 @@ async function main() {
     const dbName = client.db().databaseName || "vehicle-history";
     const db = client.db();
     console.log("Using database:", db.databaseName || dbName);
-
+    // remove all existing vehicles before inserting new samples
+    const delRes = await db.collection("vehicles").deleteMany({});
+    console.log(`Removed ${delRes.deletedCount || 0} existing vehicles.`);
     const col = db.collection("vehicles");
 
     for (const v of sampleVehicles) {

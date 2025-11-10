@@ -138,7 +138,14 @@ export default function HomePage() {
     <>
       <header className="app-header">
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div className="app-brand">
+          <div 
+            className="app-brand" 
+            onClick={() => navigate('/')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate('/'); }}
+            role="button"
+            tabIndex={0}
+            style={{ cursor: 'pointer' }}
+          >
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden>
               <rect width="24" height="24" rx="5" fill="#0ea5a4" />
               <path d="M6 15l3-6 3 6 3-8 3 10" stroke="#07203a" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
@@ -176,7 +183,7 @@ export default function HomePage() {
           </p>
 
           {route === '/create' ? (
-            <CreateVehicle ownerAddress={walletAddress} onCreated={(vin) => navigate(`/vehicle/${vin}`)} />
+            <CreateVehicle wallet={wallet} ownerAddress={walletAddress} onCreated={(vin) => navigate(`/vehicle/${vin}`)} />
           ) : route.startsWith('/vehicle/') ? (
             <VehicleDetail vin={route.replace('/vehicle/', '')} />
           ) : (
