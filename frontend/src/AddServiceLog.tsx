@@ -40,9 +40,8 @@ export default function AddServiceLog({ vin, wallet, onLogCreated }: AddServiceL
         timestamp: new Date().toISOString()
       };
 
-      // Create hash of service log data for blockchain
+      // Create hash of service log data for verification
       const dataHash = Hash.sha256(JSON.stringify(logData));
-      const doubleHash = Hash.sha256(dataHash);
 
       // Create PushDrop token for service log
       const pushdrop = new PushDrop(wallet);
@@ -51,9 +50,17 @@ export default function AddServiceLog({ vin, wallet, onLogCreated }: AddServiceL
         keyID: Utils.toBase64(dataHash)
       };
 
-      // Create locking script for the service log token
+      // Create locking script with FULL service log data embedded on-chain
       const lockingScript = await pushdrop.lock(
-        [Utils.toArray(serviceType, 'utf8'), doubleHash],
+        [
+          Utils.toArray(serviceType, 'utf8'),
+          Utils.toArray(serviceDate, 'utf8'),
+          Utils.toArray(mileage.toString(), 'utf8'),
+          Utils.toArray(description, 'utf8'),
+          Utils.toArray(cost === '' ? '0' : cost.toString(), 'utf8'),
+          Utils.toArray(vin, 'utf8'),
+          Utils.toArray(JSON.stringify(logData), 'utf8') // Full data as JSON
+        ],
         customInstructions.protocolID,
         customInstructions.keyID,
         'self',

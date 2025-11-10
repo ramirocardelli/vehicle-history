@@ -37,9 +37,8 @@ export default function CreateVehicle({ wallet, ownerAddress, onCreated }: { wal
         timestamp: new Date().toISOString()
       };
 
-      // Create hash of vehicle data for blockchain
+      // Create hash of vehicle data for verification
       const dataHash = Hash.sha256(JSON.stringify(vehicleData));
-      const doubleHash = Hash.sha256(dataHash);
 
       // Create PushDrop token
       const pushdrop = new PushDrop(wallet);
@@ -48,9 +47,17 @@ export default function CreateVehicle({ wallet, ownerAddress, onCreated }: { wal
         keyID: Utils.toBase64(dataHash)
       };
 
-      // Create locking script for the token
+      // Create locking script with FULL vehicle data embedded on-chain
       const lockingScript = await pushdrop.lock(
-        [Utils.toArray(vin, 'utf8'), doubleHash],
+        [
+          Utils.toArray(vin, 'utf8'),
+          Utils.toArray(make, 'utf8'),
+          Utils.toArray(model, 'utf8'),
+          Utils.toArray(year.toString(), 'utf8'),
+          Utils.toArray(mileage === '' ? '0' : mileage.toString(), 'utf8'),
+          Utils.toArray(ownerAddress || '', 'utf8'),
+          Utils.toArray(JSON.stringify(vehicleData), 'utf8') // Full data as JSON
+        ],
         customInstructions.protocolID,
         customInstructions.keyID,
         'self',

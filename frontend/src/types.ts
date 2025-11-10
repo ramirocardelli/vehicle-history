@@ -11,7 +11,6 @@ export type Vehicle = {
   tokenId: string;      // blockchain token identifier
   ownerAddress: string; // blockchain owner address
   currentMileage?: number; // current mileage on the blockchain
-  onchainTx?: string;   // blockchain transaction ID
   onchainAt?: string;   // ISO timestamp when token was created on-chain
   vehicleHash?: string; // hash of vehicle data stored on-chain
 };
