@@ -22,7 +22,6 @@ const sampleVehicles = [
     currentMileage: 152345,
     ownerAddress: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
     tokenId: "token-1001",
-    metadata: { color: "silver", notes: "Regular maintenance" },
   },
   {
     vin: "JH4KA8260MC000000",
@@ -32,7 +31,6 @@ const sampleVehicles = [
     currentMileage: 234000,
     ownerAddress: "1BoatSLRHtKNngkdXEeobR76b53LETtpyT",
     tokenId: "token-1002",
-    metadata: { color: "black", notes: "Classic, restored interior" },
   },
   {
     vin: "WDBJF65JYXA000000",
@@ -42,7 +40,6 @@ const sampleVehicles = [
     currentMileage: 189500,
     ownerAddress: "1dice8EMZmqKvrGE4Qc9bUFf9PX3xaYDp",
     tokenId: "token-1003",
-    metadata: { color: "blue", notes: "Imported" },
   },
   {
     vin: "3FAFP31381R000000",
@@ -52,7 +49,6 @@ const sampleVehicles = [
     currentMileage: 98000,
     ownerAddress: "1BsBN8BvjvrjJUC43Ui6KwuLXW8yTWuimn",
     tokenId: "token-1004",
-    metadata: { color: "white", notes: "Fleet vehicle" },
   },
   {
     vin: "5YJ3E1EA7KF000000",
@@ -62,7 +58,6 @@ const sampleVehicles = [
     currentMileage: 42000,
     ownerAddress: "1BsBN8BvjvrjJUC43Ui6KwuLXW8yTWuimn",
     tokenId: "token-1005",
-    metadata: { color: "red", notes: "EV — battery health good" },
   },
 ];
 

@@ -8,7 +8,6 @@ export default function CreateVehicle({ wallet, ownerAddress, onCreated }: { wal
   const [model, setModel] = useState("");
   const [year, setYear] = useState<number | ''>('');
   const [mileage, setMileage] = useState<number | ''>('');
-  const [color, setColor] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,7 +33,6 @@ export default function CreateVehicle({ wallet, ownerAddress, onCreated }: { wal
         model,
         year: Number(year),
         currentMileage: mileage === '' ? null : Number(mileage),
-        metadata: { color },
         ownerAddress,
         timestamp: new Date().toISOString()
       };
@@ -93,9 +91,7 @@ export default function CreateVehicle({ wallet, ownerAddress, onCreated }: { wal
         year: Number(year),
         currentMileage: mileage === '' ? null : Number(mileage),
         ownerAddress,
-        metadata: { color },
         tokenId: res.txid,
-        onchainTx: res.txid,
         onchainAt: new Date().toISOString(),
         vehicleHash: Utils.toBase64(dataHash)
       };
@@ -111,11 +107,11 @@ export default function CreateVehicle({ wallet, ownerAddress, onCreated }: { wal
       } else if (r.status === 409) {
         setError('VIN already exists');
       } else {
-        const body = await r.json().catch(() => ({}));
-        setError(body.error || 'Failed to create vehicle');
+        setError('Failed to create vehicle');
       }
     } catch (err: unknown) {
-      setError((err as Error).message || 'Failed to create vehicle');
+      console.error(err);
+      setError('Failed to create vehicle. The transaction could be denied.');
     } finally {
       setLoading(false);
     }
@@ -154,11 +150,6 @@ export default function CreateVehicle({ wallet, ownerAddress, onCreated }: { wal
               <input className="field-input" type="number" value={mileage} onChange={e => setMileage(e.target.value === '' ? '' : Number(e.target.value))} />
             </label>
 
-            <label className="field">
-              <span className="field-label">Color</span>
-              <input className="field-input" value={color} onChange={e => setColor(e.target.value)} />
-            </label>
-
             {error ? <div className="form-error">{error}</div> : null}
 
             <div className="form-actions">
@@ -177,7 +168,6 @@ export default function CreateVehicle({ wallet, ownerAddress, onCreated }: { wal
               <div className="preview-row"><strong>Make</strong><span>{make || '—'}</span></div>
               <div className="preview-row"><strong>Model</strong><span>{model || '—'}</span></div>
               <div className="preview-row"><strong>Year</strong><span>{year || '—'}</span></div>
-              <div className="preview-row"><strong>Color</strong><span>{color || '—'}</span></div>
               <div className="preview-row"><strong>Owner</strong><span className="mono small">{ownerAddress ? ownerAddress : 'Not connected'}</span></div>
             </div>
 

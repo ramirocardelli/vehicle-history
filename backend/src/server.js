@@ -54,7 +54,7 @@ async function start() {
   app.post('/api/vehicles', async (req, res) => {
     try {
       const body = req.body || {};
-      const { vin, make, model, year, currentMileage, ownerAddress, metadata, tokenId, onchainTx, onchainAt, vehicleHash } = body;
+      const { vin, make, model, year, currentMileage, ownerAddress, metadata, tokenId, onchainAt, vehicleHash } = body;
       if (!vin || !make || !model || !year || !ownerAddress) {
         return res.status(400).json({ error: 'Missing required fields' });
       }
@@ -73,7 +73,6 @@ async function start() {
         currentMileage: currentMileage ?? null,
         ownerAddress,
         tokenId: tokenId || null,
-        onchainTx: onchainTx || null,
         onchainAt: onchainAt ? new Date(onchainAt) : null,
         vehicleHash: vehicleHash || null,
         metadata: metadata || {},

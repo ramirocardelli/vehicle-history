@@ -24,31 +24,48 @@ export default function HomePage() {
 
   useEffect(() => {
     // Restore session if present
-    try {
-      const raw = localStorage.getItem(WALLET_SESSION_KEY);
-      if (raw) {
-        const session: WalletSession = JSON.parse(raw);
-        // Prefer the explicit address field if present
-        if (session?.address) {
-          setWalletAddress(session.address);
-          setIsWalletConnected(true);
-        } else if (session?.publicKey) {
-          // Older/previous sessions or fallback may have stored the public key.
-          // Convert it to a Bitcoin address for display.
-          try {
-            const pk = PublicKey.fromString(session.publicKey);
-            const addr = pk.toAddress().toString();
-            setWalletAddress(addr);
-            setIsWalletConnected(true);
-          } catch (err) {
-            console.error("Failed to convert stored publicKey to address:", err);
+    const restoreSession = async () => {
+      try {
+        const raw = localStorage.getItem(WALLET_SESSION_KEY);
+        if (raw) {
+          const session: WalletSession = JSON.parse(raw);
+          
+          // Recreate wallet client
+          const walletClient = new WalletClient();
+          const authenticated = await walletClient.isAuthenticated();
+          
+          if (authenticated) {
+            setWallet(walletClient);
+            
+            // Prefer the explicit address field if present
+            if (session?.address) {
+              setWalletAddress(session.address);
+              setIsWalletConnected(true);
+            } else if (session?.publicKey) {
+              // Older/previous sessions or fallback may have stored the public key.
+              // Convert it to a Bitcoin address for display.
+              try {
+                const pk = PublicKey.fromString(session.publicKey);
+                const addr = pk.toAddress().toString();
+                setWalletAddress(addr);
+                setIsWalletConnected(true);
+              } catch (err) {
+                console.error("Failed to convert stored publicKey to address:", err);
+              }
+            }
+          } else {
+            // Session exists but wallet not authenticated - clear session
+            localStorage.removeItem(WALLET_SESSION_KEY);
           }
         }
+      } catch (e) {
+        // ignore malformed session or connection errors
+        console.error("Failed to restore wallet session:", e);
+        localStorage.removeItem(WALLET_SESSION_KEY);
       }
-    } catch (e) {
-      // ignore malformed session
-      console.error("Failed to restore wallet session:", e);
-    }
+    };
+    
+    restoreSession();
   }, []);
 
   const handleConnectWallet = async () => {
