@@ -221,6 +221,8 @@ export default function HomePage() {
 function VehiclesList({ onOpen }: { onOpen: (vin: string) => void }) {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(false);
+  const [searchVin, setSearchVin] = useState('');
+  const [searchError, setSearchError] = useState('');
 
   useEffect(() => {
     setLoading(true);
@@ -231,23 +233,101 @@ function VehiclesList({ onOpen }: { onOpen: (vin: string) => void }) {
       .finally(() => setLoading(false));
   }, []);
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const vin = searchVin.trim().toUpperCase();
+    
+    if (!vin) {
+      setSearchError('Please enter a VIN');
+      return;
+    }
+
+    // Check if vehicle exists in loaded vehicles
+    const vehicle = vehicles.find(v => v.vin.toUpperCase() === vin);
+    
+    if (vehicle) {
+      setSearchError('');
+      onOpen(vehicle.vin);
+    } else {
+      setSearchError(`No vehicle found with VIN: ${vin}`);
+    }
+  };
+
+  // Filter vehicles based on search input
+  const filteredVehicles = searchVin
+    ? vehicles.filter(v => v.vin.toUpperCase().includes(searchVin.toUpperCase()))
+    : vehicles;
+
   return (
     <section>
-      <h2>Available Vehicles</h2>
+      <h2>Search Vehicle by VIN</h2>
+      
+      {/* Search Form */}
+      <form onSubmit={handleSearch} style={{ marginBottom: 24 }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+          <div style={{ flex: 1 }}>
+            <input
+              type="text"
+              value={searchVin}
+              onChange={(e) => {
+                setSearchVin(e.target.value);
+                setSearchError('');
+              }}
+              placeholder="Enter VIN (e.g., 1HGCM82633A004352)"
+              style={{
+                width: '90%',
+                padding: '10px 14px',
+                fontSize: 15,
+                border: '1px solid #ddd',
+                borderRadius: 6,
+                fontFamily: 'monospace',
+              }}
+            />
+            {searchError && (
+              <div style={{ color: '#dc2626', fontSize: 14, marginTop: 4 }}>
+                {searchError}
+              </div>
+            )}
+          </div>
+          <button type="submit" className="btn btn-primary" style={{ minWidth: 100 }}>
+            Search
+          </button>
+          {searchVin && (
+            <button 
+              type="button" 
+              className="btn btn-ghost"
+              onClick={() => {
+                setSearchVin('');
+                setSearchError('');
+              }}
+            >
+              Clear
+            </button>
+          )}
+        </div>
+      </form>
+
+      <h2>Available Vehicles {searchVin && `(${filteredVehicles.length} match${filteredVehicles.length !== 1 ? 'es' : ''})`}</h2>
       {loading ? <div>Loading…</div> : null}
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        {vehicles.map(v => (
-          <li key={v.vin} className="card vehicle-card" style={{ marginBottom: 12 }}>
-            <div>
-              <div style={{ fontWeight: 700 }}>{v.make} {v.model} <span className="muted">({v.year})</span></div>
-              <div className="vehicle-vin">{v.vin}</div>
-            </div>
-            <div>
-              <button className="btn btn-ghost" onClick={() => onOpen(v.vin)}>View</button>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {!loading && filteredVehicles.length === 0 ? (
+        <div className="muted" style={{ textAlign: 'center', padding: 40 }}>
+          {searchVin ? `No vehicles found matching "${searchVin}"` : 'No vehicles found'}
+        </div>
+      ) : (
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          {filteredVehicles.map(v => (
+            <li key={v.vin} className="card vehicle-card" style={{ marginBottom: 12 }}>
+              <div>
+                <div style={{ fontWeight: 700 }}>{v.make} {v.model} <span className="muted">({v.year})</span></div>
+                <div className="vehicle-vin">{v.vin}</div>
+              </div>
+              <div>
+                <button className="btn btn-ghost" onClick={() => onOpen(v.vin)}>View</button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
   );
 }

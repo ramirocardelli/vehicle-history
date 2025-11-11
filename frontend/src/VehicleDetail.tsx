@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { Vehicle, ServiceLog } from './types';
 import type { WalletClient } from '@bsv/sdk';
 import AddServiceLog from './AddServiceLog';
+import { generateServiceHistoryPDF } from './exportPDF';
 
 type VehicleDetailProps = {
   vin: string;
@@ -78,7 +79,19 @@ export default function VehicleDetail({ vin, wallet }: VehicleDetailProps) {
       </article>
 
       <section style={{ marginTop: 24 }}>
-        <h3>Service History</h3>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          <h3 style={{ margin: 0 }}>Service History</h3>
+          <button 
+            className="btn btn-ghost" 
+            onClick={() => generateServiceHistoryPDF(vehicle, serviceLogs)}
+            style={{ display: 'flex', alignItems: 'center', gap: 6 }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+            </svg>
+            Export PDF
+          </button>
+        </div>
         
         <AddServiceLog 
           vin={vin} 

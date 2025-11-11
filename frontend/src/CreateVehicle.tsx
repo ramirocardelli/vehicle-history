@@ -175,6 +175,7 @@ export default function CreateVehicle({ wallet, ownerAddress, onCreated }: { wal
               <div className="preview-row"><strong>Make</strong><span>{make || '—'}</span></div>
               <div className="preview-row"><strong>Model</strong><span>{model || '—'}</span></div>
               <div className="preview-row"><strong>Year</strong><span>{year || '—'}</span></div>
+              <div className="preview-row"><strong>Current mileage</strong><span>{mileage || '—'}</span></div>
               <div className="preview-row"><strong>Owner</strong><span className="mono small">{ownerAddress ? ownerAddress : 'Not connected'}</span></div>
             </div>
 
