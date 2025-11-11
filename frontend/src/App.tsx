@@ -190,9 +190,9 @@ export default function HomePage() {
         </div>
       </header>
 
-      <main style={{ padding: 28, fontFamily: 'system-ui, sans-serif' }}>
+      <main>
         <div className="container">
-          <h1 style={{ marginTop: 0 }}>Vehicle History — Sign in with BSV Desktop</h1>
+          <h1 style={{ marginTop: 0, fontSize: 'clamp(24px, 5vw, 32px)' }}>Vehicle History — Sign in with BSV Desktop</h1>
 
           <p className="muted">
             Use your BSV Desktop wallet to authenticate. This demo stores vehicle records off-chain in MongoDB
@@ -264,8 +264,8 @@ function VehiclesList({ onOpen }: { onOpen: (vin: string) => void }) {
       
       {/* Search Form */}
       <form onSubmit={handleSearch} style={{ marginBottom: 24 }}>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
-          <div style={{ flex: 1 }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+          <div style={{ flex: '1 1 300px', minWidth: 0 }}>
             <input
               type="text"
               value={searchVin}
@@ -275,12 +275,13 @@ function VehiclesList({ onOpen }: { onOpen: (vin: string) => void }) {
               }}
               placeholder="Enter VIN (e.g., 1HGCM82633A004352)"
               style={{
-                width: '90%',
+                width: '100%',
                 padding: '10px 14px',
                 fontSize: 15,
                 border: '1px solid #ddd',
                 borderRadius: 6,
                 fontFamily: 'monospace',
+                boxSizing: 'border-box',
               }}
             />
             {searchError && (

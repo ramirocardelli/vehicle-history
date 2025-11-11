@@ -54,11 +54,18 @@ export default function VehicleDetail({ vin, wallet }: VehicleDetailProps) {
     <>
       <article className="card vehicle-detail">
         <h2 style={{ marginTop: 0 }}>{vehicle.make} {vehicle.model} — {vehicle.year}</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-          <div><strong>VIN:</strong> <div className="vehicle-vin">{vehicle.vin}</div></div>
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: window.innerWidth < 768 ? '1fr' : '1fr 1fr',
+          gap: window.innerWidth < 768 ? 16 : 8
+        }}>
+          <div>
+            <strong>VIN:</strong> 
+            <div className="vehicle-vin" style={{ wordBreak: 'break-all' }}>{vehicle.vin}</div>
+          </div>
           <div>
             <strong>Token ID:</strong> 
-            <div className="vehicle-vin">
+            <div className="vehicle-vin" style={{ wordBreak: 'break-all' }}>
               {vehicle.tokenId ? (
                 <a 
                   href={`https://whatsonchain.com/tx/${vehicle.tokenId}`}
@@ -73,13 +80,23 @@ export default function VehicleDetail({ vin, wallet }: VehicleDetailProps) {
               )}
             </div>
           </div>
-          <div><strong>Owner:</strong> <div className="muted">{vehicle.ownerAddress}</div></div>
+          <div>
+            <strong>Owner:</strong> 
+            <div className="muted" style={{ wordBreak: 'break-all' }}>{vehicle.ownerAddress}</div>
+          </div>
           <div><strong>Current mileage:</strong> {vehicle.currentMileage ?? 'N/A'}</div>
         </div>
       </article>
 
       <section style={{ marginTop: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          marginBottom: 16,
+          flexWrap: window.innerWidth < 768 ? 'wrap' : 'nowrap',
+          gap: 12
+        }}>
           <h3 style={{ margin: 0 }}>Service History</h3>
           <button 
             className="btn btn-ghost" 
@@ -107,15 +124,23 @@ export default function VehicleDetail({ vin, wallet }: VehicleDetailProps) {
           <div style={{ marginTop: 16 }}>
             {serviceLogs.map((log) => (
               <div key={log._id} className="card" style={{ marginBottom: 12, padding: 16 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <div>
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'flex-start',
+                  flexWrap: window.innerWidth < 768 ? 'wrap' : 'nowrap',
+                  gap: 12
+                }}>
+                  <div style={{ flex: window.innerWidth < 768 ? '1 1 100%' : 1, minWidth: 0 }}>
                     <h4 style={{ margin: 0, marginBottom: 8 }}>{log.serviceType}</h4>
                     <div style={{ fontSize: 14, color: '#666' }}>
                       <div><strong>Date:</strong> {new Date(log.serviceDate).toLocaleDateString()}</div>
                       <div><strong>Mileage:</strong> {log.mileage.toLocaleString()} miles</div>
                       {log.cost && <div><strong>Cost:</strong> ${log.cost.toFixed(2)}</div>}
                     </div>
-                    <p style={{ marginTop: 8, marginBottom: 0 }}>{log.description}</p>
+                    <p style={{ marginTop: 8, marginBottom: 0, wordWrap: 'break-word' }}>
+                      {log.description}
+                    </p>
                   </div>
                   {log.txid && (
                     <a 
@@ -123,7 +148,7 @@ export default function VehicleDetail({ vin, wallet }: VehicleDetailProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn btn-ghost"
-                      style={{ fontSize: 12 }}
+                      style={{ fontSize: 12, flexShrink: 0 }}
                     >
                       View on Chain
                     </a>
