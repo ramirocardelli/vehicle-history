@@ -64,7 +64,7 @@ export function generateServiceHistoryPDF(vehicle: Vehicle, serviceLogs: Service
   }
   doc.rect(margin, yPos, maxWidth, boxHeight, 'F');
   yPos += 5;
-  addText('🔗 BLOCKCHAIN VERIFICATION', 9, true, [14, 165, 164]);
+  addText('BLOCKCHAIN VERIFICATION', 9, true, [14, 165, 164]);
   addText(`https://whatsonchain.com/tx/${vehicle.txid.substring(0, 40)}...`, 8, false, [51, 51, 51]);
   if (vehicle.onchainAt) {
     addText(`Created: ${new Date(vehicle.onchainAt).toLocaleString()}`, 8, false, [102, 102, 102]);
@@ -118,7 +118,7 @@ export function generateServiceHistoryPDF(vehicle: Vehicle, serviceLogs: Service
         const proofHeight = 20;
         doc.rect(margin, yPos, maxWidth, proofHeight, 'F');
         yPos += 4;
-        addText('⛓️ BLOCKCHAIN PROOF', 8, true, [14, 165, 164]);
+        addText('BLOCKCHAIN PROOF', 8, true, [14, 165, 164]);
         addText(`TX: ${log.txid.substring(0, 50)}...`, 7, false, [85, 85, 85]);
         if (log.onchainAt) {
           addText(`Recorded: ${new Date(log.onchainAt).toLocaleString()}`, 7, false, [102, 102, 102]);

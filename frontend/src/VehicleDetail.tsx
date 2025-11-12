@@ -69,6 +69,13 @@ export default function VehicleDetail({ vin, wallet }: VehicleDetailProps) {
                 {vehicle._id}
             </div>
           </div>
+          
+          <div>
+            <strong>Transaction ID:</strong> 
+            <div className="vehicle-vin" style={{ wordBreak: 'break-all' }}>
+              <a href={`https://whatsonchain.com/tx/${vehicle.txid}`} target="_blank" rel="noopener noreferrer">{vehicle.txid}</a>
+            </div>
+          </div>
           <div>
             <strong>Owner:</strong> 
             <div className="muted" style={{ wordBreak: 'break-all' }}>{vehicle.ownerAddress}</div>
