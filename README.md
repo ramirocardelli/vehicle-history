@@ -218,7 +218,6 @@ vehicle-history/
   ownerAddress: String,
   tokenId: String,        // Blockchain token ID
   onchainAt: Date,        // Timestamp of blockchain creation
-  vehicleHash: String,    // Hash of vehicle data
   createdAt: Date,
   lastUpdated: Date
 }

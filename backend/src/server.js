@@ -37,6 +37,17 @@ async function start() {
     }
   });
 
+  app.get('/api/admin', async (req, res) => {
+    try {
+      const col = db.collection('vehicles');
+      const docs = await col.find().toArray();
+      res.json(docs);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to list vehicles' });
+    }
+  });
+
   app.get('/api/vehicles/:vin', async (req, res) => {
     try {
       const vin = req.params.vin;
@@ -54,7 +65,7 @@ async function start() {
   app.post('/api/vehicles', async (req, res) => {
     try {
       const body = req.body || {};
-      const { vin, make, model, year, currentMileage, ownerAddress, txid, metadata, onchainAt, vehicleHash } = body;
+      const { vin, make, model, year, currentMileage, ownerAddress, txid, onchainAt } = body;
       if (!vin || !make || !model || !year || !ownerAddress) {
         return res.status(400).json({ error: 'Missing required fields' });
       }
@@ -74,8 +85,6 @@ async function start() {
         ownerAddress,
         txid: txid,
         onchainAt: onchainAt ? new Date(onchainAt) : null,
-        vehicleHash: vehicleHash || null,
-        metadata: metadata || {},
         createdAt: now,
         lastUpdated: now,
       };
