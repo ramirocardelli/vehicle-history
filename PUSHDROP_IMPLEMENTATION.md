@@ -58,7 +58,7 @@ const arc = await tx.broadcast(new ARC('https://arc.taal.com'));
 
 The backend now accepts the blockchain data from the frontend:
 
-- **tokenId**: Transaction ID from blockchain
+- **txid**: Transaction ID from blockchain
 - **onchainAt**: Timestamp when token was created
 - **vehicleHash**: Base64-encoded hash of vehicle data
 
@@ -74,7 +74,7 @@ Each vehicle document in MongoDB contains:
   year: number,
   currentMileage: number | null,
   ownerAddress: string,
-  tokenId: string,           // txid from blockchain
+  txid: string,           // txid from blockchain
   onchainAt: Date,            // when token was created
   vehicleHash: string,        // base64 hash of data
   createdAt: Date,
@@ -149,7 +149,7 @@ The database can track:
 3. Fill in vehicle details (VIN, make, model, year)
 4. Click "Create Token"
 5. Token is created on-chain and txid stored in database
-6. View vehicle detail to see `tokenId` and blockchain metadata
+6. View vehicle detail to see `txid` and blockchain metadata
 
 ## Cost
 

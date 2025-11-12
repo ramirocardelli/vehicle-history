@@ -30,7 +30,7 @@ async function start() {
     try {
       const col = db.collection('vehicles');
       const docs = await col.find().toArray();
-      res.json(docs.map(d => ({ vin: d.vin, make: d.make, model: d.model, year: d.year, ownerAddress: d.ownerAddress, tokenId: d.tokenId })));
+      res.json(docs.map(d => ({ vin: d.vin, make: d.make, model: d.model, year: d.year, ownerAddress: d.ownerAddress, txid: d.txid })));
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: 'Failed to list vehicles' });
@@ -54,7 +54,7 @@ async function start() {
   app.post('/api/vehicles', async (req, res) => {
     try {
       const body = req.body || {};
-      const { vin, make, model, year, currentMileage, ownerAddress, metadata, tokenId, onchainAt, vehicleHash } = body;
+      const { vin, make, model, year, currentMileage, ownerAddress, txid, metadata, onchainAt, vehicleHash } = body;
       if (!vin || !make || !model || !year || !ownerAddress) {
         return res.status(400).json({ error: 'Missing required fields' });
       }
@@ -72,7 +72,7 @@ async function start() {
         year,
         currentMileage: currentMileage ?? null,
         ownerAddress,
-        tokenId: tokenId || null,
+        txid: txid,
         onchainAt: onchainAt ? new Date(onchainAt) : null,
         vehicleHash: vehicleHash || null,
         metadata: metadata || {},

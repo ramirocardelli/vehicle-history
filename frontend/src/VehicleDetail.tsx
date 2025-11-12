@@ -66,18 +66,7 @@ export default function VehicleDetail({ vin, wallet }: VehicleDetailProps) {
           <div>
             <strong>Token ID:</strong> 
             <div className="vehicle-vin" style={{ wordBreak: 'break-all' }}>
-              {vehicle.tokenId ? (
-                <a 
-                  href={`https://whatsonchain.com/tx/${vehicle.tokenId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: '#0ea5a4', textDecoration: 'underline' }}
-                >
-                  {vehicle.tokenId}
-                </a>
-              ) : (
-                vehicle.tokenId
-              )}
+                {vehicle._id}
             </div>
           </div>
           <div>

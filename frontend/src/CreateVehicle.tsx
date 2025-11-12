@@ -98,7 +98,7 @@ export default function CreateVehicle({ wallet, ownerAddress, onCreated }: { wal
         year: Number(year),
         currentMileage: mileage === '' ? null : Number(mileage),
         ownerAddress,
-        tokenId: res.txid,
+        txid: res.txid,
         onchainAt: new Date().toISOString(),
         vehicleHash: Utils.toBase64(dataHash)
       };
@@ -179,7 +179,7 @@ export default function CreateVehicle({ wallet, ownerAddress, onCreated }: { wal
               <div className="preview-row"><strong>Owner</strong><span className="mono small">{ownerAddress ? ownerAddress : 'Not connected'}</span></div>
             </div>
 
-            <div className="preview-footer">After creation the tokenId will appear here.</div>
+            <div className="preview-footer">After creation the transaction id will appear here.</div>
           </aside>
         </div>
       </form>

@@ -77,7 +77,7 @@ Example on-chain data:
 
 ### Using WhatsOnChain Explorer
 
-1. Click the tokenId link on any vehicle
+1. Click the txid link on any vehicle
 2. View the transaction on WhatsOnChain
 3. Navigate to the "Script" tab
 4. You'll see all the embedded data fields

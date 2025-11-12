@@ -194,7 +194,7 @@ Report generated: 11/11/2025, 9:00 AM
 Add QR codes for quick mobile verification:
 ```typescript
 // Generate QR for vehicle token
-const qr = generateQR(`https://whatsonchain.com/tx/${vehicle.tokenId}`);
+const qr = generateQR(`https://whatsonchain.com/tx/${vehicle.txid}`);
 
 // Include in PDF
 <img src="${qr}" alt="Scan to verify" />

@@ -52,7 +52,7 @@ export function generateServiceHistoryPDF(vehicle: Vehicle, serviceLogs: Service
   addText(`Current Mileage: ${vehicle.currentMileage ? vehicle.currentMileage.toLocaleString() + ' miles' : 'N/A'}`, 10);
   addText(`Owner: ${vehicle.ownerAddress}`, 10);
   addSpace(3);
-  addText(`Token ID: ${vehicle.tokenId.substring(0, 32)}...`, 9, false, [102, 102, 102]);
+  addText(`Transaction: ${vehicle.txid.substring(0, 32)}...`, 9, false, [102, 102, 102]);
   addSpace(5);
 
   // Blockchain Verification
@@ -65,7 +65,7 @@ export function generateServiceHistoryPDF(vehicle: Vehicle, serviceLogs: Service
   doc.rect(margin, yPos, maxWidth, boxHeight, 'F');
   yPos += 5;
   addText('🔗 BLOCKCHAIN VERIFICATION', 9, true, [14, 165, 164]);
-  addText(`https://whatsonchain.com/tx/${vehicle.tokenId.substring(0, 40)}...`, 8, false, [51, 51, 51]);
+  addText(`https://whatsonchain.com/tx/${vehicle.txid.substring(0, 40)}...`, 8, false, [51, 51, 51]);
   if (vehicle.onchainAt) {
     addText(`Created: ${new Date(vehicle.onchainAt).toLocaleString()}`, 8, false, [102, 102, 102]);
   }
