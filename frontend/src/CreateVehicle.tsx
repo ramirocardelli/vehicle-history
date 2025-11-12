@@ -100,7 +100,6 @@ export default function CreateVehicle({ wallet, ownerAddress, onCreated }: { wal
         ownerAddress,
         txid: res.txid,
         onchainAt: new Date().toISOString(),
-        vehicleHash: Utils.toBase64(dataHash)
       };
 
       const r = await fetch('http://localhost:4001/api/vehicles', {

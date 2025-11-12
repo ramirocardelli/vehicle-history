@@ -12,7 +12,6 @@ export type Vehicle = {
   ownerAddress: string; // blockchain owner address
   currentMileage?: number; // current mileage on the blockchain
   onchainAt?: string;   // ISO timestamp when token was created on-chain
-  vehicleHash?: string; // hash of vehicle data stored on-chain
 };
 
 export type ServiceLog = {

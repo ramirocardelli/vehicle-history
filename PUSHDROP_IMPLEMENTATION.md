@@ -60,7 +60,6 @@ The backend now accepts the blockchain data from the frontend:
 
 - **txid**: Transaction ID from blockchain
 - **onchainAt**: Timestamp when token was created
-- **vehicleHash**: Base64-encoded hash of vehicle data
 
 ### 3. Database Schema
 
@@ -76,7 +75,6 @@ Each vehicle document in MongoDB contains:
   ownerAddress: string,
   txid: string,           // txid from blockchain
   onchainAt: Date,            // when token was created
-  vehicleHash: string,        // base64 hash of data
   createdAt: Date,
   lastUpdated: Date
 }
