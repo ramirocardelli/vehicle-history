@@ -37,17 +37,6 @@ async function start() {
     }
   });
 
-  app.get('/api/admin', async (req, res) => {
-    try {
-      const col = db.collection('vehicles');
-      const docs = await col.find().toArray();
-      res.json(docs);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Failed to list vehicles' });
-    }
-  });
-
   app.get('/api/vehicles/:vin', async (req, res) => {
     try {
       const vin = req.params.vin;
