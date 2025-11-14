@@ -29,7 +29,6 @@ All vehicle data and service logs are stored on-chain using PushDrop tokens, pro
 ### Blockchain
 - BSV (Bitcoin SV) blockchain
 - PushDrop token protocol
-- ARC broadcaster (https://arc.taal.com)
 - WhatsOnChain explorer integration
 
 ## Prerequisites
@@ -39,7 +38,7 @@ Before running the application, ensure you have the following installed:
 1. **Docker** - For running MongoDB
 2. **Node.js** (v18 or higher)
 3. **BSV Desktop Wallet** - Download from [https://desktop.bsvb.tech/](https://desktop.bsvb.tech/)
-4. **LARS** (Local ARC Simulator) - For local blockchain testing
+4. **LARS** For local blockchain testing
 
 ## Setup Instructions
 
@@ -47,29 +46,7 @@ Before running the application, ensure you have the following installed:
 
 Download and install the BSV Desktop Wallet from the official website. This wallet is required for authenticating and signing transactions.
 
-### 2. Start LARS (Local Blockchain)
-
-LARS provides a local blockchain environment for testing without spending real satoshis.
-
-```bash
-lars
-```
-
-When prompted:
-1. Select **"Start LARS (local only)"**
-2. Choose **"Continue without funding"**
-
-LARS will now be running on your local machine.
-
-### 3. Start MongoDB with Docker
-
-```bash
-docker run -d -p 27017:27017 --name vehicle-history-mongo mongo:latest
-```
-
-This creates a MongoDB container named `vehicle-history-mongo` accessible on port 27017.
-
-### 4. Install Dependencies
+### 2. Install Dependencies
 
 #### Backend:
 ```bash
@@ -83,7 +60,23 @@ cd frontend
 npm install
 ```
 
-### 5. Start the Backend
+### 3. Start LARS
+
+LARS provides a local blockchain environment for testing without spending real satoshis.
+
+```bash
+lars
+```
+
+When prompted:
+1. Select **"Start LARS (local only)"**
+2. Choose **"Continue without funding"**
+
+LARS will now be running on your local machine.
+
+The frontend will be available at `http://localhost:5173`
+
+### 4. Start the Backend
 
 ```bash
 cd backend
@@ -91,18 +84,6 @@ npm run start
 ```
 
 The backend API will be available at `http://localhost:4001`
-
-### 6. Start the Frontend
-
-Open a new terminal:
-
-```bash
-lars
-select > "Start LARS (local only)"
-select > "Continue without funding"
-```
-
-The frontend will be available at `http://localhost:5173`
 
 ## Usage
 
@@ -269,80 +250,6 @@ Each vehicle and service log is stored as a PushDrop token with:
 - VIN (links to vehicle)
 - Complete JSON object
 
-## Troubleshooting
-
-### Wallet Connection Issues
-
-**Problem**: "Wallet is not authenticated"
-
-**Solution**: 
-1. Open BSV Desktop Wallet
-2. Create/unlock your wallet
-3. Refresh the browser page
-4. Click "Connect BSV Desktop" again
-
-### MongoDB Connection Error
-
-**Problem**: "Failed to connect to MongoDB"
-
-**Solution**:
-```bash
-# Check if MongoDB container is running
-docker ps
-
-# If not running, start it
-docker start vehicle-history-mongo
-
-# Or create a new container
-docker run -d -p 27017:27017 --name vehicle-history-mongo mongo:latest
-```
-
-### LARS Not Running
-
-**Problem**: "Failed to broadcast transaction"
-
-**Solution**:
-1. Open a terminal
-2. Run `lars`
-3. Select "Start LARS (local only)"
-4. Choose "Continue without funding"
-
-### Backend Port Conflict
-
-**Problem**: "Port 4001 already in use"
-
-**Solution**:
-```bash
-# Find process using port 4001
-netstat -ano | findstr :4001
-
-# Kill the process (replace PID with actual process ID)
-taskkill /PID <PID> /F
-```
-
-## Development
-
-### Running Tests
-
-```bash
-# Backend tests (if implemented)
-cd backend
-npm test
-
-# Frontend tests (if implemented)
-cd frontend
-npm test
-```
-
-### Seeding Test Data
-
-```bash
-cd backend
-node scripts/seedVehicles.js
-```
-
-This creates 5 sample vehicles in the database for testing.
-
 ## Documentation
 
 - [PushDrop Implementation](./PUSHDROP_IMPLEMENTATION.md) - Token creation details
@@ -353,10 +260,6 @@ This creates 5 sample vehicles in the database for testing.
 ## Contributing
 
 This is a demo project showcasing BSV blockchain capabilities for automotive trust and transparency.
-
-## License
-
-MIT
 
 ## Contact
 
