@@ -1,0 +1,60 @@
+Vehicle History (“Service Proof”)
+
+1. PROBLEM
+Used car buyers cannot verify seller maintenance claims. Service records are paper-based, easily forged, or lost. Odometer fraud costs buyers $billions annually. No trusted way to prove vehicle care history.
+
+2. OBJECTIVE
+Create public demo where anyone adds their vehicle and logs maintenance on blockchain. Immutable, timestamped service records prove vehicle care. Showcase BSV as solution for automotive trust and transparency.
+
+3. HIGH LEVEL REQUIREMENTS
+Core Functionality
+
+* Anyone visits site without login/signup required. Wallet connection required for Car Owner (BSV Desktop Wallet)
+* No mechanic verification needed for the log service step (trust-based for demo)
+* No owner approval flow (every connected user can create a car and add their own logs without any oversight)
+* CREATE TOKEN: 
+    * Create a vehicle token, added metadata include VIN, make, model, year, current mileage (optional, if it is second hand) Token can be pushdrop or 1sat tokens
+    * Vehicle gets unique blockchain identifier (Token ID)
+* UPDATE TOKEN:
+    * Log service: type, date, mileage, description, cost
+    * Optional: Upload photo of receipt or work completed (UHRP Storage)
+    * Logs can be funded by the users wallet or a pool of treasury satoshis
+    * All logs timestamped immutably on BSV blockchain
+    * Focus on data recording + immutability proof
+* VIEW TOKENS
+    * Viewing. TBD whether viewing all cars, or only the cars created by that user. Fine with either approach.
+    * View complete vehicle history by entering VIN or selecting from the viewable gallery of created cars
+    * Can Export service history as PDF report (including txid info)
+    * Public explorer: Search any VIN to see history
+
+4. TECHNICAL REQUIREMENTS
+* Each vehicle record hashed and stored on-chain
+* Service logs linked to vehicle via overlay service
+* SPV proof generation for each log entry
+* Unique URL per vehicle for sharing (e.g., /vehicle/VIN123)
+* QR code generation for easy mobile access (optional)
+* Responsive design for desktop and mobile (optional, desktop is the focus)
+
+
+
+5. TECHNICAL COMPONENTS
+BSV BLOCKCHAIN COMPONENTS (Optional, ideas, not all are needed)
+* @bsv/sdk - Core BSV blockchain SDK for transactions, scripts, hashing, and SPV proofs
+* BRC-100 Wallet Interface - Connects to BSV Desktop Wallet for user authentication and transaction signing
+* BSV Desktop Wallet (Metanet) - End-user wallet application (users must download/install)
+* PushDrop Token Protocol - Creates vehicle tokens with embedded metadata
+* Overlay Services Engine - Manages vehicle and service log topics, provides lookup/query capabilities
+* SHIP (Service Host Interconnect Protocol) - Broadcasts transactions to overlay network
+* SLAP (Service Lookup Availability Protocol) - Queries overlay services for vehicle/log data
+* UHRP (Universal Hash Resolution Protocol) - Distributed file storage for receipt images
+* UHRP Storage Nodes - Decentralized storage servers (e.g., storage.)
+* SPV (Simplified Payment Verification) - Generates and verifies merkle proofs for transactions
+* BEEF (Background Evaluation Extended Format) - Transaction format with SPV proofs
+
+
+
+6. TECHNICAL COMPONENTS
+* You will need a database connected to record data, I recommend Mongodb, but you can choose whatever you are most conformable with. 
+* Front end, back end, framework of choice etc
+* You need to record all blockchain txid events, and the state of the UTXOs (outputs, not spent, and spent) 
+
